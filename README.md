@@ -1,2 +1,3 @@
-# This is my README .. Check after migrating to a different folder
-
+Collaborators:
+Pankaj Prateek (boygenius, pankaj200292@gmail.com)
+Rishabh Nigam (rishabhnigam31, rishabhnigam31@gmail.com)
