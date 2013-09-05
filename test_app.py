@@ -1,5 +1,6 @@
 # Include the Dropbox SDK
 import dropbox
+import json
 
 # Get your app key and secret from the Dropbox developer website
 app_key = 'tsyd07dln498sxc'
@@ -21,10 +22,13 @@ access_token, user_id = get_sample_access_token_and_user_id();
 client = dropbox.client.DropboxClient(access_token)
 print 'linked account: ', client.account_info()
 
-f = open('working-draft.txt')
-response = client.put_file('/magnum-opus.txt', f)
-print "uploaded:", response
+#f = open('working-draft.txt')
+#response = client.put_file('/magnum-opus.txt', f)
+#print "uploaded:", response
 
+folder_metadata = client.metadata('/')
+print
+print json.dumps(folder_metadata, sort_keys=True, indent=4)
 
 
 
