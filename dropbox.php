@@ -4,6 +4,16 @@
 require_once "dropbox-sdk/Dropbox/autoload.php";
 use \Dropbox as dbx;
 
+function getWebAuth()
+{
+   $appInfo = dbx\AppInfo::loadFromJsonFile("dropbox_config.json");
+   $clientIdentifier = "my-app/1.0";
+   $redirectUri = "https://example.org/dropbox-auth-finish";
+   $csrfTokenStore = new dbx\ArrayEntryStore($_SESSION, 'dropbox-auth-csrf-token');
+   return new dbx\WebAuth($appInfo, $clientIdentifier, $redirectUri, $csrfTokenStore);
+}
+
+
 $appInfo = dbx\AppInfo::loadFromJsonFile("dropbox_config.json");
 
 /*
@@ -11,12 +21,20 @@ $appInfo = dbx\AppInfo::loadFromJsonFile("dropbox_config.json");
 */
 
 
-$getDropBoxAuthenticated = true;
-$webAuth = new dbx\WebAuthNoRedirect($appInfo, "PHP-Example/1.0");
-$authorizeUrl = $webAuth->start();
+//$getDropBoxAuthenticated = true;
+//$webAuth = new dbx\WebAuthRedirect($appInfo, "localhost/software/dropbox.php");
+$authorizeUrl = getWebAuth()->start();
 
-if ($getDropBoxAuthenticated == true) {
-	$authCode = "LwvBdcKwZ0MAAAAAAAAAAaRijabv5UFKpl172-LpQHk";	
+header("Location: $authorizeUrl");
+
+
+list($accessToken, $userId, $urlState) = getWebAuth()->finish($_GET);
+assert($urlState === null);  // Since we didn't pass anything in start()
+
+echo $accessToken.$userId;
+
+/*if ($getDropBoxAuthenticated == true) {
+	$authCode = "x22uT6fzw0wAAAAAAAAAAXMx2HOYRs9GtFZS2wAgN8A";	
 } else {
 	echo "1. Go to: " . "<a href = $authorizeUrl> $authorizeUrl </a>" . "\n";
 	echo "2. Click \"Allow\" (you might have to log in first).\n";
@@ -24,7 +42,7 @@ if ($getDropBoxAuthenticated == true) {
 	$authCode = \trim(\readline("Enter the authorization code here: "));
 }
 list($accessToken, $dropboxUserId) = $webAuth->finish($authCode);
-
+*/
 print "Access Token: " . $accessToken . "\n";
 print "";
 
