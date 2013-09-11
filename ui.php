@@ -14,8 +14,8 @@
 	<table class = "table table-hover"
 		<thead>
 			<tr>
-				<td>		Service		</td>
-				<td>		Connected		</td>
+				<td> Service </td>
+				<td> Connected </td>
 			</tr>
 		</thead>
 		<tbody>
@@ -24,8 +24,12 @@
 				<td> Not </td>	
 			</tr>
 			<tr>
-			<td> <a href = "dropbox.php"> <img src="dropbox.png" height = "75px" width = "75px"/> </a>	</td>
-			<td> Not </td>	
+				<td> <a href = "dropbox.php"> <img src="dropbox.png" height = "75px" width = "75px"/> </a>	</td>
+				<td> Not </td>	
+			</tr>
+			<tr>
+				<td> <a href = "box.php"> <img src="box.jpg" height = "75px" width = "75px"/> </a>	</td>
+				<td> Not </td>	
 			</tr>
 		</tbody>
 	</div>
