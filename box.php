@@ -9,7 +9,7 @@ $api_key = '86slra9tek0b1gccb9iwy1ualyc2qqk5';
 $box_net = new Box_Rest_Client($api_key);
           
 
-
+echo "here";
 
 if(!array_key_exists('auth',$_SESSION) || empty($_SESSION['auth'])) {
   $_SESSION['auth'] = $box_net->authenticate();

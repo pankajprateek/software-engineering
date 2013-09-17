@@ -1,54 +1,35 @@
 <?php
-require_once 'google-api-php-client/src/Google_Client.php';
-require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
+session_start();
+class Drive {
 
-$client = new Google_Client();
-// Get your credentials from the APIs Console
-$client->setClientId('1057221066577-tk81bpa02v8k1hbokp3sampjkgeh1ee2.apps.googleusercontent.com');
-$client->setClientSecret('CX7WZ7uJOuSD2pYB68ZnkoGk');
-$client->setRedirectUri('http://localhost/cs455/cs455/drive.php');
-$client->setScopes(array('https://www.googleapis.com/auth/drive'));
+	public $client;
+	public $service;
 
-$service = new Google_DriveService($client);
+	function __construct() {
+		require_once 'google-api-php-client/src/Google_Client.php';
+		require_once 'google-api-php-client/src/contrib/Google_DriveService.php';
+		$this->client = new Google_Client();
+		$this->client->setClientId('1057221066577-tk81bpa02v8k1hbokp3sampjkgeh1ee2.apps.googleusercontent.com');
+		$this->client->setClientSecret('CX7WZ7uJOuSD2pYB68ZnkoGk');
+		$this->client->setRedirectUri('http://localhost/cs455/cs455/drive.php');
+		$this->client->setScopes(array('https://www.googleapis.com/auth/drive'));
 
-$authUrl = $client->createAuthUrl();
+		$this->service = new Google_DriveService($this->client);
+		if (isset($_SESSION['driveId'])) {			
+			$accessToken = $_SESSION['driveId'];
+			$this->client->setAccessToken($accessToken);
+		}
+	}
 
-echo $authUrl."\n";
+	public function isAuthenticated() {
+		if (isset($_SESSION['driveId'])) {
+			return true;
+		}	
+		return false;
+	}
 
-//Request authorization
-//print "Please visit:\n$authUrl\n\n";
-//print "Please enter the auth code:\n";
-
-//echo $_GET['code']."get\n";
-//echo $_POST['code']."post\n";
-//$authCode = " ";	
-
-if(isset($_GET['code'])) {
-
-	$authCode = $_GET['code'];
+	public function getAuthToken() {
+		return $this->client->getAccessToken();
+	}
 }
-
-echo $authCode;
-// Exchange authorization code for access token
-$accessToken = $client->authenticate($authCode);
-
-echo "here";
-$client->setAccessToken($accessToken);
-
-//Insert a file
-$file = new Google_DriveFile();
-$file->setTitle('My document');
-$file->setDescription('A test document');
-$file->setMimeType('text/plain');
-
-$data = file_get_contents('document.txt');
-
-echo $data."\n";
-
-$createdFile = $service->files->insert($file, array(
-      'data' => $data,
-      'mimeType' => 'text/plain',
-    ));
-
-print_r($createdFile);
 ?>
